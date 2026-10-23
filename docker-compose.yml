@@ -1,0 +1,52 @@
+version: '3.8'
+services:
+  frontend:
+    image: nginx:alpine
+    ports:
+      - "3000:80"
+    volumes:
+      - ./frontend/public:/usr/share/nginx/html
+    networks:
+      - campus-network
+  backend:
+    build: ./backend
+    ports:
+      - "5000:5000"
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=campus_pass
+      - DB_NAME=campus_db
+    depends_on:
+      - db
+    networks:
+      - campus-network
+  db:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=campus_pass
+      - POSTGRES_DB=campus_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - campus-network
+  mailpit:
+    image: axllent/mailpit
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+    networks:
+      - campus-network
+  adminer:
+    image: adminer
+    ports:
+      - "8080:8080"
+    networks:
+      - campus-network
+networks:
+  campus-network:
+    driver: bridge
