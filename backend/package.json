@@ -1,0 +1,19 @@
+{
+  "name": "campus-share-backend",
+  "version": "1.0.0",
+  "description": "CampusShare Backend API — Node.js/Express REST API",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.0",
+    "pg": "^8.13.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5"
+  },
+  "keywords": ["campusshare", "backend", "express", "api"],
+  "author": "Arda",
+  "license": "ISC"
+}
