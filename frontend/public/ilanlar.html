@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CampusShare — İlan Vitrini</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 min-h-screen font-sans flex flex-col">
+
+  <!-- NAV -->
+  <nav class="bg-indigo-700 text-white shadow-md">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <a href="ilanlar.html" class="text-xl font-bold tracking-tight hover:opacity-80 transition">
+        🎓 CampusShare
+      </a>
+      <div class="flex items-center gap-4 text-sm">
+        <a href="ilanlar.html" class="font-semibold underline underline-offset-4">İlanlar</a>
+        <a href="detay.html#ilan-ekle" class="bg-white text-indigo-700 hover:bg-indigo-50 font-semibold px-3.5 py-1.5 rounded-lg transition">
+          + İlan Ekle
+        </a>
+        <a href="index.html" class="hover:underline opacity-90">Çıkış</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO / BAŞLIK ALANI -->
+  <header class="bg-gradient-to-r from-indigo-600 to-blue-600 text-white py-10">
+    <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div>
+        <h1 class="text-3xl font-extrabold tracking-tight">Kampüs İlan Vitrini</h1>
+        <p class="text-indigo-100 text-sm mt-1">
+          Öğrencilerden öğrencilere ders kitabı, elektronik, kıyafet ve kampüs eşyaları
+        </p>
+      </div>
+      <div class="text-xs bg-white/15 backdrop-blur-sm px-4 py-2 rounded-full self-start md:self-auto">
+        Toplam <span id="ilan-sayisi" class="font-bold">6</span> aktif ilan gösteriliyor
+      </div>
+    </div>
+  </header>
+
+  <!-- ANA İÇERİK -->
+  <main class="max-w-6xl mx-auto px-4 py-8 flex-1 w-full space-y-8">
+
+    <!-- ══════════════════════════════════════════
+         KATEGORİ FİLTRE BUTONLARI
+         (Elektronik, Kitap, Kıyafet, Diğer)
+    ═══════════════════════════════════════════ -->
+    <section aria-label="Kategori Filtreleri" class="bg-white rounded-2xl shadow-sm p-4 border border-gray-100">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <span class="text-sm font-semibold text-gray-700">🏷️ Kategoriler:</span>
+        <div id="kategori-filtreleri" class="flex flex-wrap gap-2">
+          <button
+            type="button"
+            data-category="Tümü"
+            class="kategori-btn px-4 py-2 rounded-xl text-sm font-semibold transition bg-indigo-600 text-white shadow-sm"
+          >
+            Tümü
+          </button>
+          <button
+            type="button"
+            data-category="Elektronik"
+            class="kategori-btn px-4 py-2 rounded-xl text-sm font-medium transition bg-gray-100 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600"
+          >
+            💻 Elektronik
+          </button>
+          <button
+            type="button"
+            data-category="Kitap"
+            class="kategori-btn px-4 py-2 rounded-xl text-sm font-medium transition bg-gray-100 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600"
+          >
+            📚 Kitap
+          </button>
+          <button
+            type="button"
+            data-category="Kıyafet"
+            class="kategori-btn px-4 py-2 rounded-xl text-sm font-medium transition bg-gray-100 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600"
+          >
+            🧥 Kıyafet
+          </button>
+          <button
+            type="button"
+            data-category="Diğer"
+            class="kategori-btn px-4 py-2 rounded-xl text-sm font-medium transition bg-gray-100 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600"
+          >
+            🎒 Diğer
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         İLAN KARTLARI LİSTESİ (Hafta 1 Vitrin)
+         Hafta 2'de GET /api/listings ile dinamik
+         olarak backend'den çekilecektir.
+    ═══════════════════════════════════════════ -->
+    <section aria-label="İlan Listesi">
+      <div id="ilanlar-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <!-- Kart 1: Elektronik -->
+        <article
+          data-category="Elektronik"
+          class="ilan-karti bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow border border-gray-100 overflow-hidden flex flex-col"
+        >
+          <div class="relative bg-gray-100 h-48 overflow-hidden">
+            <img
+              src="https://placehold.co/600x400/e0e7ff/3730a3?text=MacBook+Pro+M1"
+              alt="MacBook Pro 2021 M1"
+              class="w-full h-full object-cover"
+            />
+            <span class="absolute top-3 left-3 bg-indigo-100 text-indigo-700 text-xs font-semibold px-3 py-1 rounded-full shadow-sm">
+              Elektronik
+            </span>
+          </div>
+          <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+            <div>
+              <h2 class="text-lg font-bold text-gray-900 line-clamp-1">MacBook Pro 2021 M1</h2>
+              <p class="text-gray-500 text-sm mt-1 line-clamp-2">
+                Çok az kullanılmış, kutusunda, tüm aksesuarları tam. Mühendislik dersleri için ideal.
+              </p>
+            </div>
+            <div class="pt-3 border-t border-gray-100 space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-xl font-extrabold text-indigo-600">₺35.000</span>
+                <a
+                  href="detay.html"
+                  class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-lg transition"
+                >
+                  İncele →
+                </a>
+              </div>
+              <div class="flex items-center justify-between text-xs text-gray-500">
+                <span>👤 <strong class="font-medium text-gray-700">Ahmet Yılmaz</strong></span>
+                <span>📅 23 Ekim 2026</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Kart 2: Kitap -->
+        <article
+          data-category="Kitap"
+          class="ilan-karti bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow border border-gray-100 overflow-hidden flex flex-col"
+        >
+          <div class="relative bg-gray-100 h-48 overflow-hidden">
+            <img
+              src="https://placehold.co/600x400/fef3c7/92400e?text=Calculus+Kitab%C4%B1"
+              alt="Thomas' Calculus 14. Baskı"
+              class="w-full h-full object-cover"
+            />
+            <span class="absolute top-3 left-3 bg-amber-100 text-amber-800 text-xs font-semibold px-3 py-1 rounded-full shadow-sm">
+              Kitap
+            </span>
+          </div>
+          <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+            <div>
+              <h2 class="text-lg font-bold text-gray-900 line-clamp-1">Thomas' Calculus 14. Baskı</h2>
+              <p class="text-gray-500 text-sm mt-1 line-clamp-2">
+                Sayfaları tertemiz, yırtık veya karalama yok. MAT101 ve MAT102 dersleri için kaynak kitap.
+              </p>
+            </div>
+            <div class="pt-3 border-t border-gray-100 space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-xl font-extrabold text-indigo-600">₺450</span>
+                <a
+                  href="detay.html"
+                  class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-lg transition"
+                >
+                  İncele →
+                </a>
+              </div>
+              <div class="flex items-center justify-between text-xs text-gray-500">
+                <span>👤 <strong class="font-medium text-gray-700">Zeynep Kaya</strong></span>
+                <span>📅 24 Ekim 2026</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Kart 3: Kıyafet -->
+        <article
+          data-category="Kıyafet"
+          class="ilan-karti bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow border border-gray-100 overflow-hidden flex flex-col"
+        >
+          <div class="relative bg-gray-100 h-48 overflow-hidden">
+            <img
+              src="https://placehold.co/600x400/fce7f3/9d174d?text=Kamp%C3%BCs+Sweatshirt"
+              alt="Üniversite Logolu Kapüşonlu Sweatshirt"
+              class="w-full h-full object-cover"
+            />
+            <span class="absolute top-3 left-3 bg-pink-100 text-pink-700 text-xs font-semibold px-3 py-1 rounded-full shadow-sm">
+              Kıyafet
+            </span>
+          </div>
+          <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+            <div>
+              <h2 class="text-lg font-bold text-gray-900 line-clamp-1">Üniversite Logolu Hoodie (M Beden)</h2>
+              <p class="text-gray-500 text-sm mt-1 line-clamp-2">
+                Kampüs mağazasından alındı, beden büyük geldiği için hiç giyilmedi. Etiketi üzerinde.
+              </p>
+            </div>
+            <div class="pt-3 border-t border-gray-100 space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-xl font-extrabold text-indigo-600">₺600</span>
+                <a
+                  href="detay.html"
+                  class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-lg transition"
+                >
+                  İncele →
+                </a>
+              </div>
+              <div class="flex items-center justify-between text-xs text-gray-500">
+                <span>👤 <strong class="font-medium text-gray-700">Mert Demir</strong></span>
+                <span>📅 24 Ekim 2026</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Kart 4: Elektronik -->
+        <article
+          data-category="Elektronik"
+          class="ilan-karti bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow border border-gray-100 overflow-hidden flex flex-col"
+        >
+          <div class="relative bg-gray-100 h-48 overflow-hidden">
+            <img
+              src="https://placehold.co/600x400/e0e7ff/3730a3?text=Casio+Hesap+Makinesi"
+              alt="Casio fx-991EX Bilimsel Hesap Makinesi"
+              class="w-full h-full object-cover"
+            />
+            <span class="absolute top-3 left-3 bg-indigo-100 text-indigo-700 text-xs font-semibold px-3 py-1 rounded-full shadow-sm">
+              Elektronik
+            </span>
+          </div>
+          <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+            <div>
+              <h2 class="text-lg font-bold text-gray-900 line-clamp-1">Casio fx-991EX Hesap Makinesi</h2>
+              <p class="text-gray-500 text-sm mt-1 line-clamp-2">
+                Sınavlarda kullanıma uygun, güneş enerjili ve pilli bilimsel hesap makinesi.
+              </p>
+            </div>
+            <div class="pt-3 border-t border-gray-100 space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-xl font-extrabold text-indigo-600">₺750</span>
+                <a
+                  href="detay.html"
+                  class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-lg transition"
+                >
+                  İncele →
+                </a>
+              </div>
+              <div class="flex items-center justify-between text-xs text-gray-500">
+                <span>👤 <strong class="font-medium text-gray-700">Elif Şahin</strong></span>
+                <span>📅 25 Ekim 2026</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Kart 5: Diğer -->
+        <article
+          data-category="Diğer"
+          class="ilan-karti bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow border border-gray-100 overflow-hidden flex flex-col"
+        >
+          <div class="relative bg-gray-100 h-48 overflow-hidden">
+            <img
+              src="https://placehold.co/600x400/dcfce7/166534?text=%C3%87izim+T%C3%BCp%C3%BC+%26+Cetvel"
+              alt="Mimarlık Çizim Tüpü ve T Cetveli"
+              class="w-full h-full object-cover"
+            />
+            <span class="absolute top-3 left-3 bg-emerald-100 text-emerald-700 text-xs font-semibold px-3 py-1 rounded-full shadow-sm">
+              Diğer
+            </span>
+          </div>
+          <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+            <div>
+              <h2 class="text-lg font-bold text-gray-900 line-clamp-1">Mimarlık Çizim Tüpü ve T Cetveli</h2>
+              <p class="text-gray-500 text-sm mt-1 line-clamp-2">
+                Teknik resim ve mimarlık birinci sınıf öğrencileri için ayarlanabilir askılı çizim seti.
+              </p>
+            </div>
+            <div class="pt-3 border-t border-gray-100 space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-xl font-extrabold text-indigo-600">₺350</span>
+                <a
+                  href="detay.html"
+                  class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-lg transition"
+                >
+                  İncele →
+                </a>
+              </div>
+              <div class="flex items-center justify-between text-xs text-gray-500">
+                <span>👤 <strong class="font-medium text-gray-700">Burak Aydın</strong></span>
+                <span>📅 25 Ekim 2026</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Kart 6: Kitap -->
+        <article
+          data-category="Kitap"
+          class="ilan-karti bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow border border-gray-100 overflow-hidden flex flex-col"
+        >
+          <div class="relative bg-gray-100 h-48 overflow-hidden">
+            <img
+              src="https://placehold.co/600x400/fef3c7/92400e?text=Veri+Yap%C4%B1lar%C4%B1+Notlar%C4%B1"
+              alt="Algoritmalar ve Veri Yapıları Kitabı"
+              class="w-full h-full object-cover"
+            />
+            <span class="absolute top-3 left-3 bg-amber-100 text-amber-800 text-xs font-semibold px-3 py-1 rounded-full shadow-sm">
+              Kitap
+            </span>
+          </div>
+          <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+            <div>
+              <h2 class="text-lg font-bold text-gray-900 line-clamp-1">Algoritmalara Giriş (CLRS) + Ders Notu</h2>
+              <p class="text-gray-500 text-sm mt-1 line-clamp-2">
+                Bilgisayar mühendisliği öğrencileri için temel başvuru kitabı ve çıkmış vize/final çalışma notları.
+              </p>
+            </div>
+            <div class="pt-3 border-t border-gray-100 space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-xl font-extrabold text-indigo-600">₺500</span>
+                <a
+                  href="detay.html"
+                  class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-lg transition"
+                >
+                  İncele →
+                </a>
+              </div>
+              <div class="flex items-center justify-between text-xs text-gray-500">
+                <span>👤 <strong class="font-medium text-gray-700">Selin Arslan</strong></span>
+                <span>📅 26 Ekim 2026</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="text-center text-xs text-gray-400 py-6 mt-10 border-t bg-white">
+    © 2026 CampusShare — Kampüs İçi İlan Platformu
+  </footer>
+
+  <!-- ═══════════════════════════════════════════════
+       JAVASCRIPT
+       • Hafta 1: Kategori butonları ile vitrin filtreleme
+       • Hafta 2'de GET /api/listings fetch() bağlantısı eklenecek
+  ══════════════════════════════════════════════════ -->
+  <script>
+    const kategoriButonlari = document.querySelectorAll('.kategori-btn');
+    const ilanKartlari = document.querySelectorAll('.ilan-karti');
+    const ilanSayisiEl = document.getElementById('ilan-sayisi');
+
+    const aktifSiniflar = 'kategori-btn px-4 py-2 rounded-xl text-sm font-semibold transition bg-indigo-600 text-white shadow-sm';
+    const pasifSiniflar = 'kategori-btn px-4 py-2 rounded-xl text-sm font-medium transition bg-gray-100 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600';
+
+    kategoriButonlari.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const secilenKategori = btn.getAttribute('data-category');
+
+        // Buton stillerini güncelle
+        kategoriButonlari.forEach((b) => {
+          b.className = b === btn ? aktifSiniflar : pasifSiniflar;
+        });
+
+        // Kartları filtrele
+        let gorunenSayisi = 0;
+        ilanKartlari.forEach((kart) => {
+          const kartKategori = kart.getAttribute('data-category');
+          const goster = secilenKategori === 'Tümü' || kartKategori === secilenKategori;
+          kart.classList.toggle('hidden', !goster);
+          if (goster) gorunenSayisi++;
+        });
+
+        ilanSayisiEl.textContent = gorunenSayisi;
+      });
+    });
+
+    /* ── Hafta 2'de buraya GET /api/listings fetch() gelecek ──
+    fetch('http://localhost:5000/api/listings')
+      .then((res) => res.json())
+      .then((data) => { ... })
+      .catch((err) => console.error(err));
+    */
+  </script>
+</body>
+</html>
