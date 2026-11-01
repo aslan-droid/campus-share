@@ -32,3 +32,14 @@ CREATE TABLE IF NOT EXISTS messages (
     body         TEXT NOT NULL,
     created_at   TIMESTAMP NOT NULL DEFAULT NOW()
 );
+
+-- Hafta 2: oturum token'ları
+CREATE TABLE IF NOT EXISTS sessions (
+    id         SERIAL PRIMARY KEY,
+    user_id    INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    token      VARCHAR(128) NOT NULL UNIQUE,
+    expires_at TIMESTAMP NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_sessions_user_id ON sessions(user_id);
