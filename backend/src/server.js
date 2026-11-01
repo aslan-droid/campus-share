@@ -21,6 +21,15 @@ app.get('/api/health', (req, res) => {
 });
 
 // ──────────────────────────────────────
+// Route'lar
+// ──────────────────────────────────────
+const listingsRouter = require('./routes/listings');
+const authRouter = require('./routes/auth');
+
+app.use('/api/listings', listingsRouter);
+app.use('/api/auth', authRouter);
+
+// ──────────────────────────────────────
 // Sunucuyu başlat
 // ──────────────────────────────────────
 app.listen(PORT, '0.0.0.0', () => {
