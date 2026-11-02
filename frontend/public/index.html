@@ -64,9 +64,9 @@
   </main>
 
   <script>
-    // Hafta 1: yalnızca arayüz ve istemci tarafı doğrulama.
-    // API bağlantısı (/api/auth/*) Hafta 2'de eklenecek.
     const EDU_TR = /^[^\s@]+@[^\s@]+\.edu\.tr$/i;
+    // Backend Node.js API (Port 5000)
+    const API_BASE = 'http://localhost:5000/api/auth';
 
     const tabLogin = document.getElementById('tab-login');
     const tabRegister = document.getElementById('tab-register');
@@ -77,7 +77,7 @@
     function showMessage(text, ok) {
       box.textContent = text;
       box.className = 'mb-4 p-3 rounded-lg text-sm ' +
-        (ok ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700');
+        (ok ? 'bg-green-50 text-green-700 border border-green-200' : 'bg-red-50 text-red-700 border border-red-200');
     }
 
     function switchTab(login) {
@@ -93,26 +93,88 @@
     tabLogin.addEventListener('click', () => switchTab(true));
     tabRegister.addEventListener('click', () => switchTab(false));
 
-    loginForm.addEventListener('submit', (e) => {
+    // Giriş yap formu
+    loginForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       const email = document.getElementById('login-email').value.trim();
       const password = document.getElementById('login-password').value;
+
       if (!EDU_TR.test(email)) return showMessage('Lütfen geçerli bir .edu.tr e-posta adresi girin.', false);
       if (!password) return showMessage('Şifre boş bırakılamaz.', false);
-      showMessage('Giriş doğrulandı (backend bağlantısı Hafta 2\'de eklenecek).', true);
+
+      const submitBtn = loginForm.querySelector('button[type="submit"]');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Giriş yapılıyor...';
+
+      try {
+        const res = await fetch(`${API_BASE}/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+
+        if (!res.ok) {
+          throw new Error(data.error || 'Giriş başarısız.');
+        }
+
+        // Token ve kullanıcı bilgilerini tarayıcıya kaydet
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+
+        showMessage('✅ Giriş başarılı! İlanlar sayfasına yönlendiriliyorsunuz...', true);
+        setTimeout(() => {
+          window.location.href = 'ilanlar.html';
+        }, 800);
+      } catch (err) {
+        showMessage(`❌ ${err.message}`, false);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Giriş Yap';
+      }
     });
 
-    registerForm.addEventListener('submit', (e) => {
+    // Kayıt ol formu
+    registerForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       const name = document.getElementById('reg-name').value.trim();
       const email = document.getElementById('reg-email').value.trim();
       const p1 = document.getElementById('reg-password').value;
       const p2 = document.getElementById('reg-password2').value;
+
       if (!name) return showMessage('Ad Soyad boş bırakılamaz.', false);
       if (!EDU_TR.test(email)) return showMessage('Yalnızca .edu.tr uzantılı e-posta ile kayıt olunabilir.', false);
       if (p1.length < 8) return showMessage('Şifre en az 8 karakter olmalıdır.', false);
       if (p1 !== p2) return showMessage('Şifreler eşleşmiyor.', false);
-      showMessage('Kayıt bilgileri geçerli (backend bağlantısı Hafta 2\'de eklenecek).', true);
+
+      const submitBtn = registerForm.querySelector('button[type="submit"]');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Kayıt yapılıyor...';
+
+      try {
+        const res = await fetch(`${API_BASE}/register`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ full_name: name, email, password: p1 })
+        });
+        const data = await res.json();
+
+        if (!res.ok) {
+          throw new Error(data.error || 'Kayıt başarısız.');
+        }
+
+        showMessage('✅ Kayıt başarılı! Giriş sekmesine yönlendiriliyorsunuz...', true);
+        registerForm.reset();
+        setTimeout(() => {
+          document.getElementById('login-email').value = email;
+          switchTab(true);
+        }, 1200);
+      } catch (err) {
+        showMessage(`❌ ${err.message}`, false);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Kayıt Ol';
+      }
     });
   </script>
 </body>
