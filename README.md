@@ -96,7 +96,8 @@ campus-share/
 │   └── public/
 │       ├── index.html       # .edu.tr giriş ekranı
 │       ├── ilanlar.html     # İlan vitrini
-│       └── detay.html       # İlan detay & mesaj
+│       ├── detay.html       # İlan detay & mesaj
+│       └── profil.html      # Kullanıcı profili & kendi ilanları
 ├── db/
 │   └── init.sql             # PostgreSQL başlangıç tabloları
 └── docs/

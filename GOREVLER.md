@@ -288,6 +288,8 @@ db/init.sql
 - `backend/src/routes/messages.js` — Mesaj endpoint'leri
   - `POST /api/messages` — mesaj kaydet ve Mailpit ile e-posta gönder
   - `GET /api/messages/:listingId` — ilana ait mesajları getir
+- `backend/src/routes/listings.js` güncellemesi:
+  - `GET /api/listings/user/:userId` — Profil sayfası için kullanıcının kendi ilanlarını listeleme endpoint'i
 - `nodemailer` ile Mailpit SMTP entegrasyonu (`mailpit:1025`)
 - Tüm endpoint'lere basit hata yönetimi ekle (try/catch + uygun HTTP kodları)
 
@@ -309,10 +311,15 @@ db/init.sql
 
 ---
 
-### 🟡 Ali Caner (DB & Auth)
+### 🟡 Ali Caner (DB & Auth & Profil)
 **Görevler:**
 - `backend/src/middleware/auth.js` — JWT doğrulama middleware'i
 - `db/init.sql` güncellemesi: `messages` tablosunu ekle
+- `frontend/public/profil.html` — **Profilim Sayfası:**
+  - Kullanıcı kartı (Ad Soyad, .edu.tr e-postası, hesap ID'si)
+  - "Yayındaki İlanlarım" bölümü (`GET /api/listings/user/:userId` ile fetch)
+  - İlan silme butonu (`DELETE /api/listings/:id` ile entegrasyon)
+  - Güvenli çıkış yap butonu (`localStorage` temizleme)
 - Giriş yapan kullanıcıya JWT token döndür, `localStorage`'a kaydetmek için `index.html`'i güncelle
 - Token süresi dolunca otomatik çıkış yaptır
 
@@ -322,6 +329,7 @@ db/init.sql
 backend/src/middleware/auth.js        ← OLUŞTUR
 backend/src/routes/auth.js
 frontend/public/index.html
+frontend/public/profil.html           ← OLUŞTUR
 docs/raporlar/alicaner.md
 ```
 
@@ -339,6 +347,7 @@ backend/src/routes/messages.js
 ### 🟠 Gamze (İlan Vitrini)
 **Görevler:**
 - `frontend/public/ilanlar.html` güncelle: kullanıcı giriş yapmamışsa `index.html`'e yönlendir
+- Navbar menüsüne "Profilim" (`profil.html`) bağlantısını ekle
 - Arama çubuğu ekle (başlığa göre anlık filtreleme)
 - İlan kartına "Detayı Gör" butonu ekle → `detay.html?id=<id>` şeklinde yönlendir
 - Boş ilan listesi için kullanıcı dostu mesaj göster
@@ -356,6 +365,7 @@ backend/src/
 db/init.sql
 frontend/public/index.html
 frontend/public/detay.html
+frontend/public/profil.html
 ```
 
 ---
@@ -363,6 +373,7 @@ frontend/public/detay.html
 ### 🔴 Fatih (Detay & Mesaj)
 **Görevler:**
 - `frontend/public/detay.html` güncelle: URL'deki `?id=` parametresini okuyarak `GET /api/listings/:id` çağır
+- Navbar menüsüne "Profilim" (`profil.html`) bağlantısını ekle
 - İlan detaylarını dinamik olarak sayfaya yaz
 - Mesaj formu gönderimini `POST /api/messages`'e bağla
 - Giriş yapılmamışsa mesaj kutusunu gizle ve uyarı göster
@@ -380,6 +391,7 @@ backend/src/
 db/init.sql
 frontend/public/index.html
 frontend/public/ilanlar.html
+frontend/public/profil.html
 ```
 
 ---
@@ -525,5 +537,6 @@ frontend/public/ilanlar.html
 | `frontend/public/index.html` | 🚫 | 🚫 | ✅ | 🚫 | 🚫 |
 | `frontend/public/ilanlar.html` | 🚫 | 🚫 | 🚫 | ✅ | 🚫 |
 | `frontend/public/detay.html` | 🚫 | 🚫 | 🚫 | 🚫 | ✅ |
+| `frontend/public/profil.html` | 🚫 | 🚫 | ✅ | 🚫 | 🚫 |
 | `nginx/nginx.conf` | ✅ | 🚫 | 🚫 | 🚫 | 🚫 |
 | `docs/raporlar/<isim>.md` | ✅ | ✅ | ✅ | ✅ | ✅ |
