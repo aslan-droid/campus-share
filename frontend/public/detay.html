@@ -14,9 +14,13 @@
       <a href="ilanlar.html" class="text-xl font-bold tracking-tight hover:opacity-80 transition">
         🎓 CampusShare
       </a>
-      <div class="flex gap-4 text-sm">
+      <div class="flex items-center gap-4 text-sm">
+        <span id="nav-kullanici" class="opacity-80 hidden"></span>
         <a href="ilanlar.html" class="hover:underline opacity-90">İlanlar</a>
-        <a href="index.html"   class="hover:underline opacity-90">Çıkış</a>
+        <button
+          id="cikis-btn"
+          class="hover:underline opacity-90 bg-transparent border-none cursor-pointer text-white text-sm"
+        >Çıkış</button>
       </div>
     </div>
   </nav>
@@ -24,9 +28,10 @@
   <main class="max-w-5xl mx-auto px-4 py-10 space-y-12">
 
     <!-- ══════════════════════════════════════════
-         BÖLÜM 1: İLAN DETAY KARTI (demo verisi)
-         Hafta 3'te bu alan GET /api/listings/:id
-         ile dinamik dolacak.
+         BÖLÜM 1: İLAN DETAY KARTI (demo/statik)
+         Hafta 3'te GET /api/listings/:id ile
+         URL'deki ?id= parametresi okunarak
+         dinamik dolacak.
     ═══════════════════════════════════════════ -->
     <section id="ilan-detay">
       <h2 class="text-2xl font-bold text-gray-800 mb-6">📦 İlan Detayı</h2>
@@ -71,17 +76,13 @@
 
     <!-- ══════════════════════════════════════════
          BÖLÜM 2: İLAN EKLEME FORMU
-         Hafta 2'de POST /api/listings'e bağlanacak
+         POST /api/listings — Hafta 2 ✅
     ═══════════════════════════════════════════ -->
     <section id="ilan-ekle">
       <h2 class="text-2xl font-bold text-gray-800 mb-6">➕ Yeni İlan Ekle</h2>
 
-      <!-- Toast mesajı (başlangıçta gizli) -->
-      <div
-        id="toast-ilan"
-        class="hidden mb-4 px-4 py-3 rounded-lg text-sm font-medium"
-        role="alert"
-      ></div>
+      <!-- Toast -->
+      <div id="toast-ilan" class="hidden mb-4 px-4 py-3 rounded-lg text-sm font-medium" role="alert"></div>
 
       <form id="ilan-form" class="bg-white rounded-2xl shadow-md p-6 space-y-5" novalidate>
 
@@ -91,9 +92,7 @@
             Başlık <span class="text-red-500">*</span>
           </label>
           <input
-            type="text"
-            id="baslik"
-            name="baslik"
+            type="text" id="baslik" name="baslik"
             placeholder="Örn: MacBook Pro 2021 M1"
             class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 transition"
           />
@@ -106,42 +105,32 @@
             Açıklama <span class="text-red-500">*</span>
           </label>
           <textarea
-            id="aciklama"
-            name="aciklama"
-            rows="4"
+            id="aciklama" name="aciklama" rows="4"
             placeholder="İlanınızla ilgili detayları buraya yazın..."
             class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 transition resize-none"
           ></textarea>
           <p class="text-xs text-red-500 mt-1 hidden" id="aciklama-hata">Bu alan zorunludur.</p>
         </div>
 
-        <!-- Fiyat & Kategori yan yana -->
+        <!-- Fiyat & Kategori -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <!-- Fiyat -->
           <div>
             <label for="fiyat" class="block text-sm font-semibold text-gray-700 mb-1">
               Fiyat (₺) <span class="text-red-500">*</span>
             </label>
             <input
-              type="number"
-              id="fiyat"
-              name="fiyat"
-              min="0"
-              step="0.01"
-              placeholder="0.00"
+              type="number" id="fiyat" name="fiyat" min="0" step="0.01" placeholder="0.00"
               class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 transition"
             />
-            <p class="text-xs text-red-500 mt-1 hidden" id="fiyat-hata">Geçerli bir fiyat girin.</p>
+            <p class="text-xs text-red-500 mt-1 hidden" id="fiyat-hata">Geçerli bir fiyat girin (0 veya pozitif sayı).</p>
           </div>
 
-          <!-- Kategori -->
           <div>
             <label for="kategori" class="block text-sm font-semibold text-gray-700 mb-1">
               Kategori <span class="text-red-500">*</span>
             </label>
             <select
-              id="kategori"
-              name="kategori"
+              id="kategori" name="kategori"
               class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-400 transition"
             >
               <option value="">— Seçiniz —</option>
@@ -157,22 +146,20 @@
         <!-- Görsel URL -->
         <div>
           <label for="gorsel-url" class="block text-sm font-semibold text-gray-700 mb-1">
-            Görsel URL
+            Görsel URL <span class="text-gray-400 font-normal">(isteğe bağlı)</span>
           </label>
           <input
-            type="url"
-            id="gorsel-url"
-            name="gorsel_url"
+            type="url" id="gorsel-url" name="gorsel_url"
             placeholder="https://örnek.com/resim.jpg"
             class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 transition"
           />
         </div>
 
-        <!-- Gönder butonu -->
+        <!-- Gönder -->
         <div class="flex justify-end">
           <button
-            type="submit"
-            class="bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white font-semibold px-8 py-2.5 rounded-lg text-sm transition-all"
+            type="submit" id="ilan-submit-btn"
+            class="bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white font-semibold px-8 py-2.5 rounded-lg text-sm transition-all disabled:opacity-60 disabled:cursor-not-allowed"
           >
             İlanı Yayınla
           </button>
@@ -183,76 +170,76 @@
 
     <!-- ══════════════════════════════════════════
          BÖLÜM 3: SATICIYA MESAJ KUTUSU
-         Hafta 2'de POST /api/messages'e bağlanacak
+         POST /api/messages — Hafta 2 ✅
+         (Arda'nın endpoint'i geldiğinde aktif)
+         Giriş yapılmamışsa gizlenir.
     ═══════════════════════════════════════════ -->
-    <section id="mesaj-gonder">
-      <h2 class="text-2xl font-bold text-gray-800 mb-6">✉️ Satıcıya Mesaj Gönder</h2>
+    <section id="mesaj-bolum">
+      <!-- Giriş yapılmamış uyarısı -->
+      <div id="mesaj-giris-uyari" class="hidden bg-yellow-50 border border-yellow-300 text-yellow-800 rounded-xl p-5 text-sm">
+        ⚠️ Satıcıya mesaj gönderebilmek için <a href="index.html" class="font-semibold underline">giriş yapmanız</a> gerekmektedir.
+      </div>
 
-      <!-- Toast mesajı (başlangıçta gizli) -->
-      <div
-        id="toast-mesaj"
-        class="hidden mb-4 px-4 py-3 rounded-lg text-sm font-medium"
-        role="alert"
-      ></div>
+      <!-- Mesaj formu (giriş yapılmışsa görünür) -->
+      <div id="mesaj-form-wrapper">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6">✉️ Satıcıya Mesaj Gönder</h2>
 
-      <form id="mesaj-form" class="bg-white rounded-2xl shadow-md p-6 space-y-5" novalidate>
+        <!-- Toast -->
+        <div id="toast-mesaj" class="hidden mb-4 px-4 py-3 rounded-lg text-sm font-medium" role="alert"></div>
 
-        <!-- İsim -->
-        <div>
-          <label for="m-isim" class="block text-sm font-semibold text-gray-700 mb-1">
-            Adınız <span class="text-red-500">*</span>
-          </label>
-          <input
-            type="text"
-            id="m-isim"
-            name="isim"
-            placeholder="Adınız Soyadınız"
-            class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 transition"
-          />
-          <p class="text-xs text-red-500 mt-1 hidden" id="m-isim-hata">Bu alan zorunludur.</p>
-        </div>
+        <form id="mesaj-form" class="bg-white rounded-2xl shadow-md p-6 space-y-5" novalidate>
 
-        <!-- E-posta -->
-        <div>
-          <label for="m-eposta" class="block text-sm font-semibold text-gray-700 mb-1">
-            E-posta Adresiniz <span class="text-red-500">*</span>
-          </label>
-          <input
-            type="email"
-            id="m-eposta"
-            name="eposta"
-            placeholder="ornek@uni.edu.tr"
-            class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 transition"
-          />
-          <p class="text-xs text-red-500 mt-1 hidden" id="m-eposta-hata">Geçerli bir e-posta girin.</p>
-        </div>
+          <!-- İsim (oturumdaki kullanıcıdan otomatik dolar, düzenlenebilir) -->
+          <div>
+            <label for="m-isim" class="block text-sm font-semibold text-gray-700 mb-1">
+              Adınız <span class="text-red-500">*</span>
+            </label>
+            <input
+              type="text" id="m-isim" name="isim"
+              placeholder="Adınız Soyadınız"
+              class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 transition"
+            />
+            <p class="text-xs text-red-500 mt-1 hidden" id="m-isim-hata">Bu alan zorunludur.</p>
+          </div>
 
-        <!-- Mesaj -->
-        <div>
-          <label for="m-mesaj" class="block text-sm font-semibold text-gray-700 mb-1">
-            Mesajınız <span class="text-red-500">*</span>
-          </label>
-          <textarea
-            id="m-mesaj"
-            name="mesaj"
-            rows="5"
-            placeholder="Satıcıya iletmek istediğiniz mesajı yazın..."
-            class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 transition resize-none"
-          ></textarea>
-          <p class="text-xs text-red-500 mt-1 hidden" id="m-mesaj-hata">Bu alan zorunludur.</p>
-        </div>
+          <!-- E-posta (oturumdaki e-postadan otomatik dolar) -->
+          <div>
+            <label for="m-eposta" class="block text-sm font-semibold text-gray-700 mb-1">
+              E-posta Adresiniz <span class="text-red-500">*</span>
+            </label>
+            <input
+              type="email" id="m-eposta" name="eposta"
+              placeholder="ornek@uni.edu.tr"
+              class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 transition"
+            />
+            <p class="text-xs text-red-500 mt-1 hidden" id="m-eposta-hata">Geçerli bir e-posta adresi girin.</p>
+          </div>
 
-        <!-- Gönder butonu -->
-        <div class="flex justify-end">
-          <button
-            type="submit"
-            class="bg-green-600 hover:bg-green-700 active:scale-95 text-white font-semibold px-8 py-2.5 rounded-lg text-sm transition-all"
-          >
-            Mesaj Gönder
-          </button>
-        </div>
+          <!-- Mesaj -->
+          <div>
+            <label for="m-mesaj" class="block text-sm font-semibold text-gray-700 mb-1">
+              Mesajınız <span class="text-red-500">*</span>
+            </label>
+            <textarea
+              id="m-mesaj" name="mesaj" rows="5"
+              placeholder="Satıcıya iletmek istediğiniz mesajı yazın..."
+              class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 transition resize-none"
+            ></textarea>
+            <p class="text-xs text-red-500 mt-1 hidden" id="m-mesaj-hata">Bu alan zorunludur.</p>
+          </div>
 
-      </form>
+          <!-- Gönder -->
+          <div class="flex justify-end">
+            <button
+              type="submit" id="mesaj-submit-btn"
+              class="bg-green-600 hover:bg-green-700 active:scale-95 text-white font-semibold px-8 py-2.5 rounded-lg text-sm transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+            >
+              Mesaj Gönder
+            </button>
+          </div>
+
+        </form>
+      </div>
     </section>
 
   </main>
@@ -262,20 +249,56 @@
     © 2026 CampusShare — Kampüs İçi İlan Platformu
   </footer>
 
-  <!-- ═══════════════════════════════════════════════
-       JAVASCRIPT
-       • Form doğrulama
-       • Toast bildirimi
-       • Hafta 2/3'te fetch() bağlantıları buraya eklenir
-  ══════════════════════════════════════════════════ -->
   <script>
-    /* ─── Yardımcı: hata alanı göster/gizle ─── */
+    /* ════════════════════════════════════════════
+       AYARLAR
+    ═══════════════════════════════════════════ */
+    const API_BASE = 'http://localhost:5000/api';
+
+    /* ════════════════════════════════════════════
+       OTURUM KONTROLÜ
+       index.html token'ı localStorage'a kaydediyor:
+         localStorage.setItem('token', data.token)
+         localStorage.setItem('user', JSON.stringify(data.user))
+    ═══════════════════════════════════════════ */
+    const token    = localStorage.getItem('token');
+    const userJson = localStorage.getItem('user');
+    const user     = userJson ? JSON.parse(userJson) : null;
+
+    // Kullanıcı giriş yapmamışsa ilan ekleme formunu gizle,
+    // mesaj kutusunu uyarıyla değiştir.
+    if (!token || !user) {
+      // İlan ekleme bölümünü tamamen gizle
+      document.getElementById('ilan-ekle').classList.add('hidden');
+      // Mesaj formunu gizle, uyarı göster
+      document.getElementById('mesaj-form-wrapper').classList.add('hidden');
+      document.getElementById('mesaj-giris-uyari').classList.remove('hidden');
+    } else {
+      // Nav'da kullanıcı adını göster
+      const navKullanici = document.getElementById('nav-kullanici');
+      navKullanici.textContent = '👤 ' + user.full_name;
+      navKullanici.classList.remove('hidden');
+
+      // Mesaj formuna kullanıcı bilgilerini otomatik doldur
+      document.getElementById('m-isim').value   = user.full_name || '';
+      document.getElementById('m-eposta').value = user.email     || '';
+    }
+
+    // Çıkış butonu
+    document.getElementById('cikis-btn').addEventListener('click', () => {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      window.location.href = 'index.html';
+    });
+
+    /* ════════════════════════════════════════════
+       YARDIMCI FONKSİYONLAR
+    ═══════════════════════════════════════════ */
     function setError(id, visible) {
       const el = document.getElementById(id);
       if (el) el.classList.toggle('hidden', !visible);
     }
 
-    /* ─── Yardımcı: input kenarlık rengi ─── */
     function setBorder(id, hasError) {
       const el = document.getElementById(id);
       if (!el) return;
@@ -283,7 +306,6 @@
       el.classList.toggle('border-gray-300', !hasError);
     }
 
-    /* ─── Toast bildirimi ─── */
     function showToast(toastId, message, success = true) {
       const toast = document.getElementById(toastId);
       toast.textContent = message;
@@ -294,100 +316,118 @@
           : 'bg-red-100 text-red-800 border border-red-300'
       ].join(' ');
       toast.classList.remove('hidden');
-      setTimeout(() => toast.classList.add('hidden'), 4000);
+      setTimeout(() => toast.classList.add('hidden'), 5000);
     }
 
-    /* ═══════════════════════════════
-       İLAN EKLEME FORMU — doğrulama
-    ═══════════════════════════════ */
-    document.getElementById('ilan-form').addEventListener('submit', function (e) {
+    function setLoading(btnId, loading, defaultText) {
+      const btn = document.getElementById(btnId);
+      btn.disabled = loading;
+      btn.textContent = loading ? 'Gönderiliyor...' : defaultText;
+    }
+
+    /* ════════════════════════════════════════════
+       İLAN EKLEME FORMU — POST /api/listings
+    ═══════════════════════════════════════════ */
+    document.getElementById('ilan-form').addEventListener('submit', async function (e) {
       e.preventDefault();
 
-      const baslik   = document.getElementById('baslik').value.trim();
-      const aciklama = document.getElementById('aciklama').value.trim();
-      const fiyat    = document.getElementById('fiyat').value.trim();
-      const kategori = document.getElementById('kategori').value;
+      const baslik    = document.getElementById('baslik').value.trim();
+      const aciklama  = document.getElementById('aciklama').value.trim();
+      const fiyat     = document.getElementById('fiyat').value.trim();
+      const kategori  = document.getElementById('kategori').value;
+      const gorselUrl = document.getElementById('gorsel-url').value.trim();
 
+      // ── Doğrulama ──
       let gecerli = true;
 
-      // Başlık
       const baslikHata = baslik === '';
       setError('baslik-hata', baslikHata);
       setBorder('baslik', baslikHata);
       if (baslikHata) gecerli = false;
 
-      // Açıklama
       const aciklamaHata = aciklama === '';
       setError('aciklama-hata', aciklamaHata);
       setBorder('aciklama', aciklamaHata);
       if (aciklamaHata) gecerli = false;
 
-      // Fiyat: boş veya negatif olmamalı
-      const fiyatHata = fiyat === '' || isNaN(Number(fiyat)) || Number(fiyat) < 0;
+      const fiyatSayi   = Number(fiyat);
+      const fiyatHata   = fiyat === '' || isNaN(fiyatSayi) || fiyatSayi < 0;
       setError('fiyat-hata', fiyatHata);
       setBorder('fiyat', fiyatHata);
       if (fiyatHata) gecerli = false;
 
-      // Kategori
       const kategoriHata = kategori === '';
       setError('kategori-hata', kategoriHata);
       setBorder('kategori', kategoriHata);
       if (kategoriHata) gecerli = false;
 
       if (!gecerli) {
-        showToast('toast-ilan', '⚠️ Lütfen zorunlu alanları doldurun.', false);
+        showToast('toast-ilan', '⚠️ Lütfen zorunlu alanları doğru doldurun.', false);
         return;
       }
 
-      /* ── Hafta 2'de buraya fetch() gelecek ──
-      const gorselUrl = document.getElementById('gorsel-url').value.trim();
-      fetch('http://localhost:5000/api/listings', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          title: baslik,
-          description: aciklama,
-          price: Number(fiyat),
-          category: kategori,
-          image_url: gorselUrl || null
-        })
-      })
-      .then(r => r.json())
-      .then(data => { ... })
-      .catch(err => { ... });
-      */
+      // ── API isteği ──
+      setLoading('ilan-submit-btn', true, 'İlanı Yayınla');
 
-      // Hafta 1: simüle et
-      showToast('toast-ilan', '✅ İlanınız başarıyla yayınlandı!', true);
-      this.reset();
+      try {
+        const res = await fetch(`${API_BASE}/listings`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            user_id   : user.id,
+            title     : baslik,
+            description: aciklama,
+            price     : fiyatSayi,
+            category  : kategori,
+            image_url : gorselUrl || null
+          })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          throw new Error(data.error || 'İlan eklenemedi.');
+        }
+
+        showToast('toast-ilan', '✅ İlanınız başarıyla yayınlandı!', true);
+        this.reset();
+
+      } catch (err) {
+        showToast('toast-ilan', `❌ ${err.message}`, false);
+      } finally {
+        setLoading('ilan-submit-btn', false, 'İlanı Yayınla');
+      }
     });
 
-    /* ═══════════════════════════════
-       MESAJ FORMU — doğrulama
-    ═══════════════════════════════ */
-    document.getElementById('mesaj-form').addEventListener('submit', function (e) {
+    /* ════════════════════════════════════════════
+       MESAJ FORMU — POST /api/messages
+       (Arda hafta 2'de bu endpoint'i yazacak;
+        endpoint hazır olunca otomatik çalışır.)
+    ═══════════════════════════════════════════ */
+    document.getElementById('mesaj-form').addEventListener('submit', async function (e) {
       e.preventDefault();
 
       const isim   = document.getElementById('m-isim').value.trim();
       const eposta = document.getElementById('m-eposta').value.trim();
       const mesaj  = document.getElementById('m-mesaj').value.trim();
 
+      // ── Doğrulama ──
       let gecerli = true;
 
-      // İsim
       const isimHata = isim === '';
       setError('m-isim-hata', isimHata);
       setBorder('m-isim', isimHata);
       if (isimHata) gecerli = false;
 
-      // E-posta — basit format kontrolü
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      const epostaHata = eposta === '' || !emailRegex.test(eposta);
+      const emailRegex  = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const epostaHata  = eposta === '' || !emailRegex.test(eposta);
       setError('m-eposta-hata', epostaHata);
       setBorder('m-eposta', epostaHata);
       if (epostaHata) gecerli = false;
 
-      // Mesaj
       const mesajHata = mesaj === '';
       setError('m-mesaj-hata', mesajHata);
       setBorder('m-mesaj', mesajHata);
@@ -398,32 +438,46 @@
         return;
       }
 
-      /* ── Hafta 2'de buraya fetch() gelecek ──
-      fetch('http://localhost:5000/api/messages', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          listing_id: getListingIdFromUrl(),   // Hafta 3'te URL'den okunacak
-          sender_name: isim,
-          sender_email: eposta,
-          body: mesaj
-        })
-      })
-      .then(r => r.json())
-      .then(data => { ... })
-      .catch(err => { ... });
-      */
+      // ── API isteği ──
+      setLoading('mesaj-submit-btn', true, 'Mesaj Gönder');
 
-      // Hafta 1: simüle et
-      showToast('toast-mesaj', '✅ Mesajınız satıcıya iletildi!', true);
-      this.reset();
+      try {
+        const res = await fetch(`${API_BASE}/messages`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            // listing_id: Hafta 3'te URL'deki ?id= parametresinden okunacak
+            // listing_id : new URLSearchParams(window.location.search).get('id'),
+            sender_name : isim,
+            sender_email: eposta,
+            body        : mesaj
+          })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          throw new Error(data.error || 'Mesaj gönderilemedi.');
+        }
+
+        showToast('toast-mesaj', '✅ Mesajınız satıcıya iletildi!', true);
+        // Mesaj alanını temizle (isim ve e-posta kalsın)
+        document.getElementById('m-mesaj').value = '';
+
+      } catch (err) {
+        // Eğer /api/messages henüz yoksa 404/network hatası gelir — kullanıcıya bildir
+        if (err.message.includes('Failed to fetch') || err.message.includes('404')) {
+          showToast('toast-mesaj', '⏳ Mesaj servisi henüz hazır değil, lütfen daha sonra tekrar deneyin.', false);
+        } else {
+          showToast('toast-mesaj', `❌ ${err.message}`, false);
+        }
+      } finally {
+        setLoading('mesaj-submit-btn', false, 'Mesaj Gönder');
+      }
     });
-
-    /* ── Hafta 3'te kullanılacak URL yardımcısı ──
-    function getListingIdFromUrl() {
-      return new URLSearchParams(window.location.search).get('id');
-    }
-    */
   </script>
 </body>
 </html>
