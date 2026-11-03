@@ -30,3 +30,29 @@
 - Yalnızca yetki dahilindeki `frontend/public/ilanlar.html` ve `docs/raporlar/gamze.md` dosyaları düzenlendi; diğer ekip üyelerinin dosyalarına dokunulmadı.
 
 ---
+
+## 📅 Hafta 2: 2026-11-03
+
+### ✅ Bu Hafta Yapılanlar
+- `frontend/public/ilanlar.html` güncellendi: İlanlar `fetch()` kullanılarak `GET http://localhost:5000/api/listings` endpoint'inden dinamik olarak çekilecek şekilde bağlandı.
+- Veri çekilirken kullanıcıya gösterilen yüklenme animasyonu (`#loading-spinner`) eklendi.
+- Kategori filtre butonları (**Tümü**, **Elektronik**, **Kitap**, **Kıyafet**, **Diğer**) JavaScript ile aktif edilerek backend'e query parametresi (`GET http://localhost:5000/api/listings?category=<Kategori>`) gönderecek şekilde entegre edildi.
+- Backend API yanıtındaki (`id`, `title`, `description`, `price`, `category`, `image_url`, `seller_name`, `created_at`) alanlarıyla tam uyumlu dinamik kart oluşturma (`createListingCard`) ve hata/boş liste durum yönetimi eklendi.
+
+### 🔄 Devam Eden Çalışmalar
+- Hafta 3'te giriş kontrolü (`localStorage` token kontrolü ile `index.html` yönlendirmesi), arama çubuğu ve navbar'a `profil.html` bağlantısının eklenmesi.
+
+### 🚧 Karşılaşılan Engeller
+- Yok (Hafta 2 görevleri tamamlandı)
+
+### 🎯 Gelecek Hafta Hedefleri
+- Giriş yapmamış kullanıcıları `index.html` sayfasına yönlendirmek
+- Navbar'a "Profilim" (`profil.html`) bağlantısını eklemek
+- Başlığa göre anlık filtreleme yapan arama çubuğu eklemek
+- İlan kartlarındaki detay butonlarını `detay.html?id=<id>` yapısıyla tam entegre etmek
+
+### 💬 Notlar
+- Tarayıcı üzerinde çalışan frontend kodunda kurallara uygun olarak `http://localhost:5000/api/listings` adresi kullanıldı.
+- Yalnızca sorumluluk alanındaki `frontend/public/ilanlar.html` ve `docs/raporlar/gamze.md` dosyaları güncellendi.
+
+---
