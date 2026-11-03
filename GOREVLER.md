@@ -290,6 +290,7 @@ db/init.sql
   - `GET /api/messages/:listingId` — ilana ait mesajları getir
 - `backend/src/routes/listings.js` güncellemesi:
   - `GET /api/listings/user/:userId` — Profil sayfası için kullanıcının kendi ilanlarını listeleme endpoint'i
+  - İlan görseli için cihazdan yüklenen resimlerin (Base64 data URL veya multipart) kaydedilmesini destekleme
 - `nodemailer` ile Mailpit SMTP entegrasyonu (`mailpit:1025`)
 - Tüm endpoint'lere basit hata yönetimi ekle (try/catch + uygun HTTP kodları)
 
@@ -373,6 +374,7 @@ frontend/public/profil.html
 ### 🔴 Fatih (Detay & Mesaj)
 **Görevler:**
 - `frontend/public/detay.html` güncelle: URL'deki `?id=` parametresini okuyarak `GET /api/listings/:id` çağır
+- **Cihazdan Fotoğraf Yükleme:** İlan ekleme formuna dosya seçici (`<input type="file" accept="image/*">`) ve seçilen resmin önizlemesini (preview) ekleme (kullanıcı cihazından fotoğraf seçip yükleyebilecek)
 - Navbar menüsüne "Profilim" (`profil.html`) bağlantısını ekle
 - İlan detaylarını dinamik olarak sayfaya yaz
 - Mesaj formu gönderimini `POST /api/messages`'e bağla
