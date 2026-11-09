@@ -7,7 +7,9 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors());
-app.use(express.json());
+// Cihazdan yüklenen Base64 görseller için gövde boyutu sınırı artırıldı (Hafta 3)
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // ──────────────────────────────────────
 // Sağlık kontrolü endpoint'i
@@ -25,9 +27,11 @@ app.get('/api/health', (req, res) => {
 // ──────────────────────────────────────
 const listingsRouter = require('./routes/listings');
 const authRouter = require('./routes/auth');
+const messagesRouter = require('./routes/messages');
 
 app.use('/api/listings', listingsRouter);
 app.use('/api/auth', authRouter);
+app.use('/api/messages', messagesRouter);
 
 // ──────────────────────────────────────
 // Sunucuyu başlat
