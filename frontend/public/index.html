@@ -93,6 +93,29 @@
     tabLogin.addEventListener('click', () => switchTab(true));
     tabRegister.addEventListener('click', () => switchTab(false));
 
+    // Oturum kontrolü: Kullanıcı zaten giriş yapmış ve token geçerli ise ilanlar sayfasına yönlendir
+    (async function checkExistingSession() {
+      const token = localStorage.getItem('token');
+      const user = localStorage.getItem('user');
+      if (token && user) {
+        try {
+          const res = await fetch(`${API_BASE}/me`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          if (res.ok) {
+            window.location.href = 'ilanlar.html';
+          } else {
+            // Token süresi dolmuş veya geçersiz
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            localStorage.removeItem('expires_at');
+          }
+        } catch (e) {
+          // Backend ulaşılamazsa sessizce kal
+        }
+      }
+    })();
+
     // Giriş yap formu
     loginForm.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -121,6 +144,9 @@
         // Token ve kullanıcı bilgilerini tarayıcıya kaydet
         localStorage.setItem('token', data.token);
         localStorage.setItem('user', JSON.stringify(data.user));
+        if (data.expires_at) {
+          localStorage.setItem('expires_at', data.expires_at);
+        }
 
         showMessage('✅ Giriş başarılı! İlanlar sayfasına yönlendiriliyorsunuz...', true);
         setTimeout(() => {

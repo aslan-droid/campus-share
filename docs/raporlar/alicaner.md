@@ -58,3 +58,41 @@
 - Token şimdilik `crypto.randomBytes` ile üretiliyor, 3. haftada JWT'ye geçilecek
 
 ---
+
+## 📅 Hafta 3 — 2026-11-09
+
+### ✅ Bu Hafta Yapılanlar
+- `backend/src/middleware/auth.js` oluşturuldu
+  - `Authorization: Bearer <token>` başlığı ayrıştırılarak veritabanındaki `sessions` tablosundan doğrulama yapıldı
+  - Süresi dolmuş oturumlar otomatik olarak tespit edilip `401 Unauthorized` ile reddedildi ve temizlendi
+  - Doğrulanan kullanıcı nesnesi `req.user` olarak sonraki middleware/endpoint'lere aktarıldı
+- `backend/src/routes/auth.js` güncellendi
+  - `GET /api/auth/me`: Auth middleware ile korunan, aktif kullanıcı ve oturum doğrulama endpoint'i eklendi
+  - `POST /api/auth/logout`: Auth middleware ile korunan, aktif oturumu veritabanından güvenli silme endpoint'i eklendi
+- `frontend/public/profil.html` oluşturuldu (Tailwind CSS CDN)
+  - Kullanıcı kimlik kartı (Ad Soyad, üniversite e-postası, hesap ID'si, aktiflik durumu)
+  - Yayındaki İlanlarım alanı: Kullanıcının ilanları dinamik olarak listelendi
+  - İlan silme butonu: `DELETE /api/listings/:id` ile entegre edildi ve onaylı silme sağlandı
+  - Güvenli çıkış yap butonu: `localStorage` temizliği ve sunucu oturumu sonlandırma ile entegre edildi
+  - Oturum süresi dolunca otomatik `index.html` yönlendirmesi sağlandı
+- `frontend/public/index.html` güncellendi
+  - Halihazırda geçerli bir oturumu olan kullanıcıların doğrudan `ilanlar.html`'e yönlendirilmesi kontrolü eklendi
+- `db/init.sql` güncellendi
+  - `idx_listings_user_id` ve `idx_messages_listing_id` performans indeksleri eklendi
+
+### 🔄 Devam Eden Çalışmalar
+- 4. hafta hazırlıkları: Güvenlik gözden geçirmesi, seed data ve uçtan uca testler
+
+### 🚧 Karşılaşılan Engeller
+- Yok
+
+### 🎯 Gelecek Hafta Hedefleri
+- `db/init.sql` son gözden geçirme: index'ler, kısıtlamalar, seed data ekleme
+- Kayıt akışını uçtan uca test etme
+- Şifre sıfırlama akışı için "Şifremi Unuttum" bağlantısı ekleme (Mailpit üzerinden)
+- Güvenlik denetimi ve son kontroller
+
+### 💬 Notlar
+- Arda'nın `GET /api/listings/user/:userId` endpoint'i beklenirken `profil.html` geriye dönük uyumlu olacak şekilde hem yeni endpoint'i hem de fallback olarak `/api/listings` filtrelemesini destekleyecek şekilde kodlandı.
+
+---

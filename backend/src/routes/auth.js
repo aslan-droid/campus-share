@@ -1,8 +1,9 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
+const authMiddleware = require('../middleware/auth');
 
-// db.js Arda tarafından yazılacak; hem `module.exports = pool` hem
+// db.js Arda tarafından yazıldı; hem `module.exports = pool` hem
 // `module.exports = { pool }` biçimini destekler.
 const dbModule = require('../db');
 const pool = dbModule.pool || dbModule;
@@ -87,6 +88,32 @@ router.post('/login', async (req, res) => {
     });
   } catch (err) {
     console.error('Giriş hatası:', err);
+    return res.status(500).json({ error: 'Sunucu hatası.' });
+  }
+});
+
+// GET /api/auth/me — Aktif oturum ve kullanıcı bilgilerini doğrula
+router.get('/me', authMiddleware, async (req, res) => {
+  try {
+    return res.status(200).json({
+      authenticated: true,
+      user: req.user
+    });
+  } catch (err) {
+    console.error('Kullanıcı bilgisi alma hatası:', err);
+    return res.status(500).json({ error: 'Sunucu hatası.' });
+  }
+});
+
+// POST /api/auth/logout — Oturumu sonlandır ve veritabanından sil
+router.post('/logout', authMiddleware, async (req, res) => {
+  try {
+    if (req.token) {
+      await pool.query('DELETE FROM sessions WHERE token = $1', [req.token]);
+    }
+    return res.status(200).json({ message: 'Oturum başarıyla kapatıldı.' });
+  } catch (err) {
+    console.error('Çıkış yapma hatası:', err);
     return res.status(500).json({ error: 'Sunucu hatası.' });
   }
 });
