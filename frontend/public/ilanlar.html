@@ -6,26 +6,36 @@
   <title>CampusShare — İlan Vitrini</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-50 min-h-screen font-sans flex flex-col">
+<body class="bg-gray-50 min-h-screen font-sans flex flex-col text-gray-800">
 
-  <!-- NAV -->
-  <nav class="bg-indigo-700 text-white shadow-md">
+  <!-- ══════════════════════════════════════════
+       NAVBAR (Hafta 3: Profilim bağlantısı ve Çıkış Yap)
+  ═══════════════════════════════════════════ -->
+  <nav class="bg-indigo-700 text-white shadow-md sticky top-0 z-50">
     <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-      <a href="ilanlar.html" class="text-xl font-bold tracking-tight hover:opacity-80 transition">
-        🎓 CampusShare
+      <a href="ilanlar.html" class="text-xl font-bold tracking-tight hover:opacity-85 transition flex items-center gap-2">
+        <span>🎓</span>
+        <span>CampusShare</span>
       </a>
       <div class="flex items-center gap-4 text-sm">
         <a href="ilanlar.html" class="font-semibold underline underline-offset-4">İlanlar</a>
-        <a href="detay.html#ilan-ekle" class="bg-white text-indigo-700 hover:bg-indigo-50 font-semibold px-3.5 py-1.5 rounded-lg transition">
+        <a href="detay.html#ilan-ekle" class="bg-white text-indigo-700 hover:bg-indigo-50 font-semibold px-3.5 py-1.5 rounded-lg transition shadow-sm">
           + İlan Ekle
         </a>
-        <a href="index.html" class="hover:underline opacity-90">Çıkış</a>
+        <a href="profil.html" class="hover:underline opacity-90 transition flex items-center gap-1">
+          <span>👤</span> Profilim
+        </a>
+        <button id="btn-logout" type="button" class="text-indigo-200 hover:text-white hover:underline transition">
+          Çıkış Yap
+        </button>
       </div>
     </div>
   </nav>
 
-  <!-- HERO / BAŞLIK ALANI -->
-  <header class="bg-gradient-to-r from-indigo-600 to-blue-600 text-white py-10">
+  <!-- ══════════════════════════════════════════
+       HERO / BAŞLIK ALANI
+  ═══════════════════════════════════════════ -->
+  <header class="bg-gradient-to-r from-indigo-600 to-blue-600 text-white py-10 shadow-inner">
     <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
       <div>
         <h1 class="text-3xl font-extrabold tracking-tight">Kampüs İlan Vitrini</h1>
@@ -33,21 +43,52 @@
           Öğrencilerden öğrencilere ders kitabı, elektronik, kıyafet ve kampüs eşyaları
         </p>
       </div>
-      <div class="text-xs bg-white/15 backdrop-blur-sm px-4 py-2 rounded-full self-start md:self-auto">
-        Toplam <span id="ilan-sayisi" class="font-bold">0</span> aktif ilan gösteriliyor
+      <div class="flex flex-wrap items-center gap-3 self-start md:self-auto">
+        <div id="aktif-kullanici-rozet" class="hidden text-xs bg-white/10 border border-white/20 px-3.5 py-2 rounded-full">
+          👋 Merhaba, <strong id="kullanici-adi-metin" class="font-bold">Öğrenci</strong>
+        </div>
+        <div class="text-xs bg-white/15 backdrop-blur-sm px-4 py-2 rounded-full">
+          Toplam <span id="ilan-sayisi" class="font-bold">0</span> aktif ilan gösteriliyor
+        </div>
       </div>
     </div>
   </header>
 
-  <!-- ANA İÇERİK -->
+  <!-- ══════════════════════════════════════════
+       ANA İÇERİK
+  ═══════════════════════════════════════════ -->
   <main class="max-w-6xl mx-auto px-4 py-8 flex-1 w-full space-y-8">
 
     <!-- ══════════════════════════════════════════
-         KATEGORİ FİLTRE BUTONLARI
-         (Tümü, Elektronik, Kitap, Kıyafet, Diğer)
+         ARAMA ÇUBUĞU VE KATEGORİ FİLTRE BUTONLARI
+         (Hafta 3: Başlığa göre anlık filtreleme + Kategori seçimi)
     ═══════════════════════════════════════════ -->
-    <section aria-label="Kategori Filtreleri" class="bg-white rounded-2xl shadow-sm p-4 border border-gray-100">
-      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+    <section aria-label="Arama ve Kategori Filtreleri" class="bg-white rounded-2xl shadow-sm p-5 border border-gray-100 space-y-4">
+      
+      <!-- Arama Çubuğu -->
+      <div class="relative">
+        <label for="arama-input" class="sr-only">İlan başlığına göre ara</label>
+        <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-gray-400 pointer-events-none">
+          🔍
+        </span>
+        <input
+          id="arama-input"
+          type="search"
+          placeholder="İlan başlığına göre anlık ara (örn: MacBook, Calculus, Hoodie...)"
+          autocomplete="off"
+          class="w-full pl-11 pr-24 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-800 placeholder-gray-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+        />
+        <button
+          id="arama-temizle"
+          type="button"
+          class="hidden absolute inset-y-1.5 right-2 px-3 text-xs font-semibold text-gray-500 hover:text-indigo-600 bg-gray-100 hover:bg-indigo-50 rounded-lg transition"
+        >
+          Temizle ✕
+        </button>
+      </div>
+
+      <!-- Kategori Filtre Butonları -->
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pt-2 border-t border-gray-100">
         <span class="text-sm font-semibold text-gray-700">🏷️ Kategoriler:</span>
         <div id="kategori-filtreleri" class="flex flex-wrap gap-2">
           <button
@@ -114,18 +155,27 @@
     </div>
 
     <!-- ══════════════════════════════════════════
-         BOŞ İLAN LİSTESİ DURUMU
+         BOŞ İLAN LİSTESİ DURUMU (Hafta 3: Kullanıcı dostu mesaj)
     ═══════════════════════════════════════════ -->
-    <div id="empty-state" class="hidden bg-white border border-gray-100 rounded-2xl shadow-sm p-12 text-center space-y-3">
-      <div class="text-4xl">📭</div>
-      <h2 class="text-lg font-bold text-gray-800">Bu kategoride henüz ilan bulunmuyor</h2>
-      <p class="text-sm text-gray-500 max-w-md mx-auto">
-        Seçtiğiniz kategoride yayınlanmış aktif bir ilan yok. İlk ilanı siz ekleyebilirsiniz!
+    <div id="empty-state" class="hidden bg-white border border-gray-100 rounded-2xl shadow-sm p-12 text-center space-y-4">
+      <div class="text-5xl">📭</div>
+      <h2 id="empty-state-title" class="text-xl font-bold text-gray-800">
+        Aradığınız kriterlere uygun ilan bulunamadı
+      </h2>
+      <p id="empty-state-desc" class="text-sm text-gray-500 max-w-md mx-auto leading-relaxed">
+        Seçtiğiniz kategoride veya arama kelimesinde henüz yayınlanmış aktif bir ilan yok. Filtreleri sıfırlayabilir ya da ilk ilanı siz ekleyebilirsiniz!
       </p>
-      <div class="pt-2">
+      <div class="pt-2 flex flex-wrap items-center justify-center gap-3">
+        <button
+          id="filtreleri-sifirla-btn"
+          type="button"
+          class="bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-semibold px-5 py-2.5 rounded-xl transition"
+        >
+          Tüm İlanları Göster
+        </button>
         <a
           href="detay.html#ilan-ekle"
-          class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition"
+          class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition shadow-sm"
         >
           + Yeni İlan Ekle
         </a>
@@ -133,7 +183,7 @@
     </div>
 
     <!-- ══════════════════════════════════════════
-         İLAN KARTLARI LİSTESİ (Hafta 2: Dinamik API)
+         İLAN KARTLARI LİSTESİ
          GET http://localhost:5000/api/listings
     ═══════════════════════════════════════════ -->
     <section aria-label="İlan Listesi">
@@ -149,15 +199,63 @@
 
   <!-- ═══════════════════════════════════════════════
        JAVASCRIPT
-       • Hafta 2: GET http://localhost:5000/api/listings
-       • Yüklenme animasyonu (spinner)
-       • Kategori filtresi (query param: ?category=...)
+       • Hafta 3: Giriş kontrolü (giriş yapılmamışsa index.html'e yönlendir)
+       • Hafta 3: Başlığa göre anlık arama çubuğu filtrelemesi
+       • Hafta 3: "Detayı Gör" butonu -> detay.html?id=<id>
+       • Hafta 3: Boş ilan listesi için kullanıcı dostu mesaj
+       • Hafta 2: GET http://localhost:5000/api/listings fetch() ve kategori filtresi
   ══════════════════════════════════════════════════ -->
   <script>
-    // Tarayıcıdan erişildiği için localhost:5000 kullanılır
-    const API_URL = 'http://localhost:5000/api/listings';
+    const API_BASE = 'http://localhost:5000/api';
+    const API_URL = `${API_BASE}/listings`;
 
+    // ─── 1. OTURUM (AUTH) KONTROLÜ ───
+    // Kullanıcı giriş yapmamışsa doğrudan index.html'e yönlendir
+    (function oturumKontrolu() {
+      const token = localStorage.getItem('token');
+      const userStr = localStorage.getItem('user');
+      const expiresAt = localStorage.getItem('expires_at');
+
+      if (!token || !userStr) {
+        window.location.replace('index.html');
+        return;
+      }
+
+      // Süre kontrolü
+      if (expiresAt && new Date(expiresAt).getTime() <= Date.now()) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        localStorage.removeItem('expires_at');
+        window.location.replace('index.html');
+        return;
+      }
+
+      try {
+        const user = JSON.parse(userStr);
+        if (!user || !user.email) {
+          throw new Error('Geçersiz kullanıcı verisi');
+        }
+        const rozet = document.getElementById('aktif-kullanici-rozet');
+        const adMetin = document.getElementById('kullanici-adi-metin');
+        if (rozet && adMetin && user.full_name) {
+          adMetin.textContent = user.full_name;
+          rozet.classList.remove('hidden');
+        }
+      } catch (e) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        localStorage.removeItem('expires_at');
+        window.location.replace('index.html');
+      }
+    })();
+
+    // ─── DOM Elemanları ───
     const kategoriButonlari = document.querySelectorAll('.kategori-btn');
+    const aramaInput = document.getElementById('arama-input');
+    const aramaTemizleBtn = document.getElementById('arama-temizle');
+    const filtreleriSifirlaBtn = document.getElementById('filtreleri-sifirla-btn');
+    const logoutBtn = document.getElementById('btn-logout');
+
     const ilanlarGrid = document.getElementById('ilanlar-grid');
     const ilanSayisiEl = document.getElementById('ilan-sayisi');
     const loadingSpinner = document.getElementById('loading-spinner');
@@ -165,8 +263,11 @@
     const errorText = document.getElementById('error-text');
     const retryBtn = document.getElementById('retry-btn');
     const emptyState = document.getElementById('empty-state');
+    const emptyStateTitle = document.getElementById('empty-state-title');
+    const emptyStateDesc = document.getElementById('empty-state-desc');
 
     let aktifKategori = 'Tümü';
+    let tumIlanlar = []; // Seçili kategorideki API'den gelen ilanlar
 
     const aktifSiniflar = 'kategori-btn px-4 py-2 rounded-xl text-sm font-semibold transition bg-indigo-600 text-white shadow-sm';
     const pasifSiniflar = 'kategori-btn px-4 py-2 rounded-xl text-sm font-medium transition bg-gray-100 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600';
@@ -220,7 +321,7 @@
       });
     }
 
-    // Tek bir ilan kartının HTML şablonunu oluşturur
+    // ─── 2. İLAN KARTI ŞABLONU (Hafta 3: "Detayı Gör" -> detay.html?id=<id>) ───
     function createListingCard(ilan) {
       const kategori = ilan.category || 'Diğer';
       const stil = kategoriRenkleri[kategori] || kategoriRenkleri['Diğer'];
@@ -232,7 +333,9 @@
       const satici = escapeHtml(ilan.seller_name || 'Kampüs Öğrencisi');
       const fiyat = formatPrice(ilan.price);
       const tarih = formatDate(ilan.created_at);
-      const detayUrl = ilan.id ? `detay.html?id=${encodeURIComponent(ilan.id)}` : 'detay.html';
+      const detayUrl = ilan.id !== undefined && ilan.id !== null
+        ? `detay.html?id=${encodeURIComponent(ilan.id)}`
+        : 'detay.html';
 
       return `
         <article
@@ -255,19 +358,19 @@
               <h2 class="text-lg font-bold text-gray-900 line-clamp-1">${baslik}</h2>
               <p class="text-gray-500 text-sm mt-1 line-clamp-2">${aciklama}</p>
             </div>
-            <div class="pt-3 border-t border-gray-100 space-y-2">
-              <div class="flex items-center justify-between">
-                <span class="text-xl font-extrabold text-indigo-600">${fiyat}</span>
-                <a
-                  href="${detayUrl}"
-                  class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-lg transition"
-                >
-                  İncele →
-                </a>
-              </div>
+            <div class="pt-3 border-t border-gray-100 space-y-3">
               <div class="flex items-center justify-between text-xs text-gray-500">
                 <span>👤 <strong class="font-medium text-gray-700">${satici}</strong></span>
                 <span>📅 ${tarih}</span>
+              </div>
+              <div class="flex items-center justify-between pt-1">
+                <span class="text-xl font-extrabold text-indigo-600">${fiyat}</span>
+                <a
+                  href="${detayUrl}"
+                  class="inline-flex items-center gap-1 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 px-3.5 py-2 rounded-xl transition shadow-sm"
+                >
+                  Detayı Gör →
+                </a>
               </div>
             </div>
           </div>
@@ -275,23 +378,65 @@
       `;
     }
 
-    // Backend'den ilanları çek (kategori filtresiyle birlikte)
+    // ─── 3. ARAMA VE LİSTELEME (Başlığa göre anlık filtreleme + Boş durum mesajı) ───
+    function ilanlariEkranaBas() {
+      const arananKelime = (aramaInput.value || '').trim().toLocaleLowerCase('tr-TR');
+      aramaTemizleBtn.classList.toggle('hidden', arananKelime.length === 0);
+
+      const filtrelenmis = tumIlanlar.filter((ilan) => {
+        if (!arananKelime) return true;
+        const baslik = String(ilan.title || '').toLocaleLowerCase('tr-TR');
+        return baslik.includes(arananKelime);
+      });
+
+      ilanSayisiEl.textContent = String(filtrelenmis.length);
+
+      if (filtrelenmis.length === 0) {
+        ilanlarGrid.innerHTML = '';
+        if (arananKelime && tumIlanlar.length > 0) {
+          emptyStateTitle.textContent = `"${aramaInput.value.trim()}" için ilan bulunamadı`;
+          emptyStateDesc.textContent = 'Aradığınız başlıkla eşleşen bir ilan bulamadık. Farklı bir anahtar kelime deneyebilir veya arama filtresini temizleyebilirsiniz.';
+        } else if (aktifKategori !== 'Tümü') {
+          emptyStateTitle.textContent = `${aktifKategori} kategorisinde henüz ilan bulunmuyor`;
+          emptyStateDesc.textContent = 'Seçtiğiniz kategoride yayınlanmış aktif bir ilan yok. Diğer kategorilere göz atabilir veya ilk ilanı siz ekleyebilirsiniz!';
+        } else {
+          emptyStateTitle.textContent = 'Henüz yayınlanmış ilan bulunmuyor';
+          emptyStateDesc.textContent = 'Kampüs vitrininde şu an aktif bir ilan yok. İlk ilanı paylaşarak vitrini başlatabilirsiniz!';
+        }
+        emptyState.classList.remove('hidden');
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+      ilanlarGrid.innerHTML = filtrelenmis.map(createListingCard).join('');
+    }
+
+    // ─── 4. BACKEND'DEN İLANLARI ÇEKME ───
     async function ilanlariGetir(kategori = 'Tümü') {
       aktifKategori = kategori;
 
-      // Spinner'ı göster, diğer alanları gizle
       loadingSpinner.classList.remove('hidden');
       errorBox.classList.add('hidden');
       emptyState.classList.add('hidden');
       ilanlarGrid.innerHTML = '';
 
-      // Query param oluştur
       const endpoint = kategori && kategori !== 'Tümü'
         ? `${API_URL}?category=${encodeURIComponent(kategori)}`
         : API_URL;
 
       try {
-        const response = await fetch(endpoint);
+        const token = localStorage.getItem('token');
+        const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+
+        const response = await fetch(endpoint, { headers });
+        if (response.status === 401) {
+          localStorage.removeItem('token');
+          localStorage.removeItem('user');
+          localStorage.removeItem('expires_at');
+          window.location.replace('index.html');
+          return;
+        }
+
         if (!response.ok) {
           throw new Error(`Sunucu yanıt hatası (${response.status})`);
         }
@@ -299,14 +444,8 @@
         const ilanlar = await response.json();
         loadingSpinner.classList.add('hidden');
 
-        if (!Array.isArray(ilanlar) || ilanlar.length === 0) {
-          ilanSayisiEl.textContent = '0';
-          emptyState.classList.remove('hidden');
-          return;
-        }
-
-        ilanSayisiEl.textContent = String(ilanlar.length);
-        ilanlarGrid.innerHTML = ilanlar.map(createListingCard).join('');
+        tumIlanlar = Array.isArray(ilanlar) ? ilanlar : [];
+        ilanlariEkranaBas();
       } catch (err) {
         console.error('İlanlar çekilirken hata oluştu:', err);
         loadingSpinner.classList.add('hidden');
@@ -316,24 +455,63 @@
       }
     }
 
-    // Kategori filtre butonlarına tıklama olayı
+    // ─── 5. OLAY DİNLEYİCİLERİ (EVENT LISTENERS) ───
+    // Başlığa göre anlık arama
+    aramaInput.addEventListener('input', () => {
+      ilanlariEkranaBas();
+    });
+
+    // Arama temizleme butonu
+    aramaTemizleBtn.addEventListener('click', () => {
+      aramaInput.value = '';
+      ilanlariEkranaBas();
+      aramaInput.focus();
+    });
+
+    // Kategori filtre butonları
     kategoriButonlari.forEach((btn) => {
       btn.addEventListener('click', () => {
         const secilenKategori = btn.getAttribute('data-category');
 
-        // Aktif buton stilini güncelle
         kategoriButonlari.forEach((b) => {
           b.className = b === btn ? aktifSiniflar : pasifSiniflar;
         });
 
-        // Seçilen kategoriyi backend'den query param ile çek
         ilanlariGetir(secilenKategori);
       });
+    });
+
+    // Boş durumdaki "Tüm İlanları Göster" butonu
+    filtreleriSifirlaBtn.addEventListener('click', () => {
+      aramaInput.value = '';
+      kategoriButonlari.forEach((b) => {
+        b.className = b.getAttribute('data-category') === 'Tümü' ? aktifSiniflar : pasifSiniflar;
+      });
+      ilanlariGetir('Tümü');
     });
 
     // Tekrar dene butonu
     retryBtn.addEventListener('click', () => {
       ilanlariGetir(aktifKategori);
+    });
+
+    // Güvenli Çıkış Yap butonu
+    logoutBtn.addEventListener('click', async () => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        try {
+          await fetch(`${API_BASE}/auth/logout`, {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+        } catch (e) {
+          // Ağ hatası olsa bile yerel oturumu temizle
+        }
+      }
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      localStorage.removeItem('expires_at');
+      window.location.replace('index.html');
     });
 
     // Sayfa yüklendiğinde tüm ilanları çek
