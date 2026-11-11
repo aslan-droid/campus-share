@@ -56,3 +56,28 @@
 - Yalnızca sorumluluk alanındaki `frontend/public/ilanlar.html` ve `docs/raporlar/gamze.md` dosyaları güncellendi.
 
 ---
+
+## 📅 Hafta 3: 2026-11-11
+
+### ✅ Bu Hafta Yapılanlar
+- `frontend/public/ilanlar.html` sayfasına oturum kontrolü eklendi: `localStorage` üzerinde geçerli `token` ve `user` bilgisi bulunmayan veya oturum süresi (`expires_at`) dolmuş kullanıcılar otomatik olarak `index.html` sayfasına yönlendiriliyor.
+- Navbar menüsüne **Profilim** (`profil.html`) bağlantısı ve oturumu sonlandıran **Çıkış Yap** işlevi eklendi.
+- İlan başlığına göre anlık filtreleme yapan **Arama Çubuğu** (`#arama-input`) ve hızlı temizleme butonu eklendi.
+- İlan kartlarına **"Detayı Gör →"** butonu eklenerek `detay.html?id=<id>` adresine dinamik yönlendirme sağlandı.
+- Arama sonucunda veya seçili kategoride ilan bulunamadığında gösterilen, filtreleri sıfırlama ve yeni ilan ekleme aksiyonlarına sahip kullanıcı dostu boş liste ekranı (`#empty-state`) geliştirildi.
+
+### 🔄 Devam Eden Çalışmalar
+- Hafta 4'te URL query parametresi (`?kategori=Kitap`) ile kategori filtresi senkronizasyonu, sayfalama UI'ı (Önceki / Sonraki butonları) ve son mobil uyumluluk kontrolleri yapılacak.
+
+### 🚧 Karşılaşılan Engeller
+- Yok (Hafta 3 görevleri eksiksiz tamamlandı)
+
+### 🎯 Gelecek Hafta Hedefleri
+- Kategori filtresinin URL query parametresi (`?kategori=Kitap`) ile çalıştığını doğrulamak
+- İlan listesine Sayfalama (Önceki / Sonraki) arayüzü eklemek
+- Mobil uyumluluk ve sunum öncesi son tasarım kontrollerini tamamlamak
+
+### 💬 Notlar
+- Yalnızca sorumluluk alanındaki `frontend/public/ilanlar.html` ve `docs/raporlar/gamze.md` dosyaları düzenlendi; diğer ekip üyelerinin dosyalarına dokunulmadı.
+
+---
