@@ -6,8 +6,12 @@ services:
       - "3000:80"
     volumes:
       - ./frontend/public:/usr/share/nginx/html
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - backend
     networks:
       - campus-network
+
   backend:
     build: ./backend
     ports:
@@ -18,10 +22,14 @@ services:
       - DB_USER=postgres
       - DB_PASSWORD=campus_pass
       - DB_NAME=campus_db
+      - SMTP_HOST=mailpit
+      - SMTP_PORT=1025
     depends_on:
       - db
+      - mailpit
     networks:
       - campus-network
+
   db:
     image: postgres:15-alpine
     environment:
@@ -34,6 +42,7 @@ services:
       - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - campus-network
+
   mailpit:
     image: axllent/mailpit
     ports:
@@ -41,12 +50,14 @@ services:
       - "1025:1025"
     networks:
       - campus-network
+
   adminer:
     image: adminer
     ports:
       - "8080:8080"
     networks:
       - campus-network
+
 networks:
   campus-network:
     driver: bridge
