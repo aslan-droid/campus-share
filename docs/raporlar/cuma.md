@@ -91,9 +91,49 @@
 
 ---
 
-## 📅 Hafta 3 — (Gelecek)
+## 📅 Hafta 3 — 13 Kasım 2026
 
-*(Hafta 3 tamamlandığında burası güncellenecek.)*
+### ✅ Bu Hafta Yapılanlar
+
+- **Nginx Ters Proxy Yapılandırması (`nginx/nginx.conf`) Kuruldu:**
+  - `/api/*` rotalarına gelen tüm istekler `http://backend:5000` upstream servisine yönlendirildi.
+  - Proxy başlıkları (`Host`, `X-Real-IP`, `X-Forwarded-For`, `X-Forwarded-Proto`, WebSocket `Upgrade`) eksiksiz tanımlandı.
+  - Cihazdan yüklenen yüksek çözünürlüklü fotoğraflar ve Base64 verileri için `client_max_body_size 10M;` sınırı getirildi.
+  - Statik frontend dosyaları (`/usr/share/nginx/html`) için Gzip sıkıştırma (`gzip on`) ve `try_files` yönlendirmesi aktif edildi.
+- **`docker-compose.yml` Güncellendi:**
+  - `frontend` servisine `./nginx/nginx.conf:/etc/nginx/nginx.conf:ro` mount edildi ve `depends_on: [backend]` eklendi.
+  - `backend` servisine Mailpit ortam değişkenleri (`SMTP_HOST=mailpit`, `SMTP_PORT=1025`) ve `depends_on: [mailpit]` eklendi.
+- **GitHub Actions CI Pipeline (`.github/workflows/ci.yml`) Kuruldu:**
+  - `main` branch'e yapılan push ve PR'larda otomatik tetiklenen iki aşamalı CI iş akışı oluşturuldu:
+    1. **`backend-test`**: Node.js 20 ortamında `npm install` ve tüm JS dosyalarının (`server.js`, `db.js`, `routes/*.js`, `middleware/*.js`) sözdizimi doğrulaması (`node --check`).
+    2. **`docker-test`**: `docker compose config` sözdizimi denetimi ve backend `Dockerfile` build testi.
+- **Mailpit Entegrasyonu Doğrulandı:**
+  - Backend `messages.js` ile Mailpit SMTP (`mailpit:1025`) bağlantısı denetlendi; satıcı e-postalarına giden bildirim şablonu doğrulandı.
+- **3. Hafta PR İncelemeleri ve Birleştirmeleri:**
+  - Ali Caner (Hafta 3): Auth middleware (`auth.js`), `/me`, `/logout` ve `profil.html` onaylandı ve merge edildi.
+  - Arda (Hafta 3): `messages.js`, Mailpit SMTP e-posta tetikleme, `GET /api/listings/user/:userId` onaylandı ve merge edildi.
+  - Gamze (Hafta 3): `ilanlar.html` canlı arama çubuğu, oturum kontrolü ve `detay.html?id=` yönlendirmesi onaylandı ve merge edildi.
+  - Fatih (Hafta 3): `detay.html` dinamik ID okuma (`GET /api/listings/:id`) ve mesaj formunun `listing_id` ile bağlanması onaylandı ve merge edildi.
+
+### 🔄 Devam Eden Çalışmalar
+
+- Fatih'in cihazdan fotoğraf yükleme butonunu (`<input type="file">`) son haline getirmesi
+- Hafta 4 sunum ve canlı demo ortamının hazırlanması
+
+### 🚧 Karşılaşılan Engeller
+
+- Yok. Tüm servisler bridge ağında sağlıklı ve izole bir şekilde haberleşiyor.
+
+### 🎯 Hafta 4 Hedefleri
+
+- `docker compose down && docker compose up -d` ile temiz başlatma testlerini tamamlamak
+- Tüm ortam değişkenlerinin `.env.example` üzerinden son dokümantasyonunu çıkarmak
+- `README.md` dosyasını ekran görüntüleri ve final mimari diyagramla zenginleştirmek
+- Proje sunumu için demo senaryosu (Kayıt ol → İlan ekle → Ara → Detay gör → Mesaj gönder → Mailpit'te gör → Profilde sil) hazırlamak
+
+### 💬 Notlar
+
+- Nginx reverse proxy sayesinde tarayıcının doğrudan port 5000'e gitmesine gerek kalmadı; tüm web trafiği tek bir kapıdan (port 3000) yönetilebiliyor.
 
 ---
 
