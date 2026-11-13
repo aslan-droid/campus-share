@@ -14,61 +14,61 @@
 - Her iki form için istemci taraflı doğrulama (boş alan, negatif fiyat, e-posta format kontrolü)
 - Başarılı/hatalı gönderim sonrası toast bildirimi eklendi
 
-### 🔄 Devam Eden Çalışmalar
-- Hafta 2'de `POST /api/listings` ve `POST /api/messages` için `fetch()` bağlantıları eklenecek
-- Hafta 3'te URL'deki `?id=` parametresi okunarak `GET /api/listings/:id` çağrılacak
-
-### 🚧 Karşılaşılan Engeller
-- Yok (Hafta 1 görevi tamamlandı)
-
-### 🎯 Gelecek Hafta Hedefleri
-- Arda'nın backend endpoint'leri hazır olunca form gönderimlerini gerçek API'ye bağla
-- Başarı/hata toast mesajlarını API yanıtına göre özelleştir
-- Giriş yapılmamış kullanıcı için mesaj kutusunu gizleme mantığı ekle (JWT kontrolü)
-
 ### 💬 Notlar
-- Tüm tasarım Tailwind CSS CDN (`https://cdn.tailwindcss.com`) ile yapıldı, harici bağımlılık yok
-- Hafta 2/3 için `fetch()` kodları yorum satırı olarak bırakıldı, kolayca aktif edilebilir
-- `ilanlar.html`, `index.html` ve diğer yasak dosyalara kesinlikle dokunulmadı
+- Tailwind CSS CDN kullanıldı, harici bağımlılık yok
+- `ilanlar.html`, `index.html` ve diğer yasak dosyalara dokunulmadı
 
 ---
 
 ## 📅 Hafta 2: 2026-11-03
 
 ### ✅ Bu Hafta Yapılanlar
-- `frontend/public/detay.html` güncellendi — gerçek API bağlantıları eklendi
 - İlan ekleme formu `POST /api/listings`'e `fetch()` ile bağlandı
-  - `user_id`, `title`, `description`, `price`, `category`, `image_url` gönderiliyor
-  - `Authorization: Bearer <token>` başlığı eklendi (index.html'in localStorage'ına uyumlu)
-- Mesaj formu `POST /api/messages`'e hazırlandı (Arda ile koordineli; endpoint gelince aktif)
-  - `sender_name`, `sender_email`, `body` alanları gönderiliyor
-  - Listing ID Hafta 3'te URL'den okunacak şekilde yorum satırı olarak hazır bırakıldı
-- Form doğrulama genişletildi: boş alan, negatif fiyat, e-posta format kontrolü ✅
-- Toast bildirimleri: başarı/hata durumu API yanıtına göre dinamik ✅
-- **Oturum kontrolü eklendi:**
-  - Giriş yapılmamışsa ilan ekleme formu gizleniyor
-  - Giriş yapılmamışsa mesaj kutusu yerine uyarı gösteriliyor
-  - Giriş yapılmışsa kullanıcı adı nav'da görünüyor
-  - Kullanıcı bilgileri (isim, e-posta) mesaj formuna otomatik dolduruluyor
-- Çıkış butonu eklendi (localStorage temizleyip index.html'e yönlendirir)
-- Buton yükleme durumu eklendi (disabled + "Gönderiliyor..." metni)
-
-### 🔄 Devam Eden Çalışmalar
-- `POST /api/messages` endpoint'i Arda tarafından hazırlanıyor (Hafta 3)
-- Hafta 3'te `GET /api/listings/:id` ile URL'deki `?id=` parametresi okunacak
-
-### 🚧 Karşılaşılan Engeller
-- `/api/messages` endpoint'i henüz backend'de yazılmadı; form hazır, bağlantı Hafta 3'te tamamlanacak
-
-### 🎯 Gelecek Hafta Hedefleri
-- URL'deki `?id=` parametresini okuyarak `GET /api/listings/:id` çağır
-- İlan detaylarını API'den dinamik olarak sayfaya yaz
-- Mesaj formunu `POST /api/messages`'e tam olarak bağla
-- Giriş kontrolünü `listing_id` ile birleştir
+- Mesaj formu `POST /api/messages`'e hazırlandı (Arda ile koordineli)
+- Oturum kontrolü eklendi: giriş yapılmamışsa formlar gizleniyor
+- Kullanıcı bilgileri `localStorage`'dan mesaj formuna otomatik dolduruluyor
+- Loading durumu ve gerçek API hata mesajları eklendi
+- Çıkış butonu eklendi
 
 ### 💬 Notlar
-- `localStorage` yapısı index.html ile tam uyumlu: `token` ve `user` (JSON) anahtarları kullanıldı
-- `POST /api/listings` için gereken `user_id` alanı `localStorage`'daki `user.id`'den alınıyor
+- `localStorage` yapısı index.html ile tam uyumlu: `token` ve `user` anahtarları
+- `/api/messages` listing_id bağlantısı Hafta 3'e bırakıldı
+
+---
+
+## 📅 Hafta 3: 2026-11-12
+
+### ✅ Bu Hafta Yapılanlar
+- **İlan detayı dinamik hale getirildi (Hafta 3 ana görevi) ✅**
+  - `URLSearchParams` ile URL'deki `?id=` parametresi okunuyor
+  - `GET /api/listings/:id` çağrılarak ilan detayı API'den çekiliyor
+  - Başlık, açıklama, fiyat, kategori, satıcı adı, tarih ve görsel sayfaya dinamik yazılıyor
+  - Yüklenme sırasında spinner gösteriliyor
+  - İlan bulunamazsa (404 veya ID yok) kullanıcı dostu hata ekranı gösteriliyor
+  - Sayfa başlığı (`<title>`) ilan adıyla güncelleniyor
+
+- **Mesaj formu `listing_id` ile tam olarak bağlandı ✅**
+  - `listing_id` artık URL'deki `?id=` parametresinden otomatik okunuyor
+  - `POST /api/messages`'e `listing_id`, `sender_name`, `sender_email`, `body` gönderiliyor
+  - Arda'nın `messages.js`'i e-posta gönderimi yapıyor; `email_sent` alanına göre kullanıcıya bilgi veriliyor
+  - `listing_id` yoksa (doğrudan URL'den girilmişse) uyarı mesajı gösteriliyor
+
+- Giriş yapılmamışsa mesaj kutusu gizleniyor, uyarı gösteriliyor ✅
+
+### 🔄 Devam Eden Çalışmalar
+- Hafta 4: Mobil uyumluluk kontrolü, demo senaryosu testi
+
+### 🚧 Karşılaşılan Engeller
+- Yok
+
+### 🎯 Gelecek Hafta Hedefleri
+- Mobil uyumluluk son kontrol
+- Demo senaryosu: ilan ekle → detayı gör → mesaj gönder → Mailpit'te e-posta görün
+- Form geri bildirimlerini gözden geçir
+
+### 💬 Notlar
+- Arda'nın `GET /api/listings/:id` endpoint'i `id, title, description, price, category, image_url, seller_name, seller_email, created_at` döndürüyor; tam uyumlu kullanıldı
+- Arda'nın `POST /api/messages` endpoint'i `email_sent` alanı döndürüyor; kullanıcıya e-posta bildirimi hakkında bilgi veriliyor
 - Yasak dosyalara (`ilanlar.html`, `index.html`, `backend/`, `db/`) dokunulmadı
 
 ---
